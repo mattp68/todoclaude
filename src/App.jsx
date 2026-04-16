@@ -24,6 +24,15 @@ export default function App() {
 
   const removeTodo = (id) => setTodos(todos.filter((t) => t.id !== id))
 
+  const updateTodo = (id, text) => {
+    const next = text.trim()
+    if (!next) {
+      removeTodo(id)
+      return
+    }
+    setTodos(todos.map((t) => (t.id === id ? { ...t, text: next } : t)))
+  }
+
   const clearCompleted = () => setTodos(todos.filter((t) => !t.done))
 
   const visible = useMemo(() => {
@@ -58,7 +67,12 @@ export default function App() {
         onClearCompleted={clearCompleted}
       />
 
-      <TodoList todos={visible} onToggle={toggleTodo} onRemove={removeTodo} />
+      <TodoList
+        todos={visible}
+        onToggle={toggleTodo}
+        onRemove={removeTodo}
+        onUpdate={updateTodo}
+      />
 
       {todos.length === 0 && (
         <p className="empty">No todos yet — add one above.</p>
